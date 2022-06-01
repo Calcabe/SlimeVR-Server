@@ -149,6 +149,7 @@ public class TrackersList extends EJBoxNoStretch {
 		JLabel rotQuat;
 		JLabel rotAdj;
 		JLabel temperature;
+                Font   monoFont;
 
 		@AWTThread
 		public TrackerPanel(Tracker t) {
@@ -239,11 +240,13 @@ public class TrackersList extends EJBoxNoStretch {
 				add(new JLabel("Signal"), c(4, row, 2, GridBagConstraints.FIRST_LINE_START));
 			}
 			row++;
-			if (t.hasRotation())
+			if (t.hasRotation()) {
 				add(
 					rotation = new JLabel("0 0 0"),
 					c(0, row, 2, GridBagConstraints.FIRST_LINE_START)
 				);
+                                rotation.setFont(monoFont);
+                        }
 			if (t.hasPosition())
 				add(
 					position = new JLabel("0 0 0"),
@@ -264,7 +267,7 @@ public class TrackersList extends EJBoxNoStretch {
 			row++;
 			add(new JLabel("Status:"), c(0, row, 2, GridBagConstraints.FIRST_LINE_START));
 			add(
-				status = new JLabel(t.getStatus().toString().toLowerCase()),
+				status = new JLabel(""),
 				c(1, row, 2, GridBagConstraints.FIRST_LINE_START)
 			);
 			if (realTracker instanceof TrackerWithBattery) {
@@ -273,10 +276,8 @@ public class TrackersList extends EJBoxNoStretch {
 			}
 			row++;
 			add(new JLabel("Raw:"), c(0, row, 2, GridBagConstraints.FIRST_LINE_START));
-			add(
-				raw = new JLabel("0 0 0"),
-				s(c(1, row, 2, GridBagConstraints.FIRST_LINE_START), 3, 1)
-			);
+			add(raw = new JLabel("0 0 0 "), s(c(1, row, 2, GridBagConstraints.FIRST_LINE_START), 3, 1));
+                        raw.setFont(monoFont);
 
 			if (debug && realTracker instanceof IMUTracker) {
 				add(new JLabel("Quat:"), c(2, row, 2, GridBagConstraints.FIRST_LINE_START));
@@ -337,7 +338,28 @@ public class TrackersList extends EJBoxNoStretch {
 					c(3, row, 2, GridBagConstraints.FIRST_LINE_START)
 				);
 			}
-
+                        
+                        monoFont = new Font(Font.MONOSPACED, Font.BOLD, (int)(12 * gui.getZoom()));
+                        
+                        if (position != null) position.setFont(monoFont);
+                        if (rotation != null) rotation.setFont(monoFont);
+                        status.setFont(monoFont);
+                        tps.setFont(monoFont);
+                        if (bat != null) bat.setFont(monoFont);
+                        if (ping != null) ping.setFont(monoFont);
+                        raw.setFont(monoFont);
+                        if (rawMag != null) rawMag.setFont(monoFont);
+                        if (calibration != null) calibration.setFont(monoFont);
+                        if (magAccuracy != null) magAccuracy.setFont(monoFont);
+                        if (adj != null) adj.setFont(monoFont);
+                        if (adjYaw != null) adjYaw.setFont(monoFont);
+                        if (adjGyro != null) adjGyro.setFont(monoFont);
+                        if (correction != null) correction.setFont(monoFont);
+                        if (signalStrength != null) signalStrength.setFont(monoFont);
+                        if (rotQuat != null) rotQuat.setFont(monoFont);
+                        if (rotAdj != null) rotAdj.setFont(monoFont);
+                        if (temperature != null) temperature.setFont(monoFont);
+                        
 			setBorder(BorderFactory.createLineBorder(new Color(0x663399), 2, false));
 			TrackersList.this.add(this);
 			return this;
@@ -366,17 +388,18 @@ public class TrackersList extends EJBoxNoStretch {
 					);
 			if (rotation != null)
 				rotation
-					.setText(
-						StringUtils.prettyNumber(angles[0] * FastMath.RAD_TO_DEG, 0)
-							+ " "
-							+ StringUtils.prettyNumber(angles[1] * FastMath.RAD_TO_DEG, 0)
-							+ " "
-							+ StringUtils.prettyNumber(angles[2] * FastMath.RAD_TO_DEG, 0)
+                                        .setText(
+                                                String.format("%4s", StringUtils.prettyNumber(angles[0] * FastMath.RAD_TO_DEG, 0))
+                                                        + " " + 
+                                                        String.format("%4s", StringUtils.prettyNumber(angles[1] * FastMath.RAD_TO_DEG, 0))
+                                                        + " " + 
+                                                        String.format("%4s", StringUtils.prettyNumber(angles[2] * FastMath.RAD_TO_DEG, 0))
+                                                        + " "
 					);
-			status.setText(t.getStatus().toString().toLowerCase());
+			status.setText(String.format("%-5s", t.getStatus().toString().toLowerCase()) + " ");
 
 			if (realTracker instanceof TrackerWithTPS) {
-				tps.setText(StringUtils.prettyNumber(((TrackerWithTPS) realTracker).getTPS(), 1));
+				tps.setText(String.format("%6s", StringUtils.prettyNumber(((TrackerWithTPS) realTracker).getTPS(), 1)));
 			}
 			if (realTracker instanceof TrackerWithBattery) {
 				TrackerWithBattery twb = (TrackerWithBattery) realTracker;
@@ -453,11 +476,12 @@ public class TrackersList extends EJBoxNoStretch {
 			q.toAngles(angles);
 			raw
 				.setText(
-					StringUtils.prettyNumber(angles[0] * FastMath.RAD_TO_DEG, 0)
-						+ " "
-						+ StringUtils.prettyNumber(angles[1] * FastMath.RAD_TO_DEG, 0)
-						+ " "
-						+ StringUtils.prettyNumber(angles[2] * FastMath.RAD_TO_DEG, 0)
+                                        String.format("%4s", StringUtils.prettyNumber(angles[0] * FastMath.RAD_TO_DEG, 0))
+                                            + " " + 
+                                            String.format("%4s", StringUtils.prettyNumber(angles[1] * FastMath.RAD_TO_DEG, 0))
+                                            + " " + 
+                                            String.format("%4s", StringUtils.prettyNumber(angles[2] * FastMath.RAD_TO_DEG, 0))
+                                            + " "
 				);
 			if (realTracker instanceof IMUTracker) {
 				IMUTracker imu = (IMUTracker) realTracker;
