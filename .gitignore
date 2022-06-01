@@ -16,6 +16,7 @@ MagnetoLib.dll
 vrconfig.yml
 *.log
 *.log.lck
+*.log.1
 
 BVH Recordings
 Recordings
