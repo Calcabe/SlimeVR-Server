@@ -17,8 +17,8 @@ vrconfig.yml
 /logs/
 *.log
 *.log.lck
-log_main.log.*
-log_last.log.*
+/log_main.log.*
+/log_last.log.*
 
 BVH Recordings
 Recordings
